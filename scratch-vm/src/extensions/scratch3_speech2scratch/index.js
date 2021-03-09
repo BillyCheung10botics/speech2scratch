@@ -12,6 +12,10 @@ const Message = {
     'ja': '音声',
     'en': 'speech'
   },
+  match: {
+    'ja': '[SPEECH]を聞いたとき',
+    'en': 'when I hear [SPEECH]'
+  },
 }
 const AvailableLocales = ['en', 'ja'];
 
@@ -38,6 +42,17 @@ class Scratch3Speech2Scratch {
                     opcode: 'getSpeech',
                     blockType: BlockType.REPORTER,
                     text: Message.speech[this._locale]
+                },
+                {
+                    opcode: 'matchSpeech',
+                    blockType: BlockType.HAT,
+                    text: Message.match[this._locale],
+                    arguments: {
+                        SPEECH: {
+                                type: ArgumentType.STRING,
+                                defaultValue: 'hello'
+                        }
+                    }         
                 }
             ],
             menus: {
@@ -57,7 +72,10 @@ class Scratch3Speech2Scratch {
     getSpeech() {
         return this.speech;
     }
-    
+    matchSpeech(args) {
+        return this.speech===args.SPEECH;
+    }
+  
     setLocale() {
       let locale = formatMessage.setup().locale;
       if (AvailableLocales.includes(locale)) {
